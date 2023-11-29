@@ -1,0 +1,79 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+void LRU() {
+    int p;
+    cout << "Enter the total number of pages:\n";
+    cin >> p;
+
+    int arr[p];
+    for(int i = 0; i < p; i++) {
+        cout << "Enter the value of page " << i + 1 << endl;
+        cin >> arr[i];
+    }
+
+    int f;
+    cout << "Enter the total number of frames:\n";
+    cin >> f;
+
+    int arr1[f]; // Array to store page frames
+    int order[f]; // Array to store the order of pages in frames
+
+    for(int i = 0; i < f; i++) {
+        arr1[i] = -1;
+        order[i] = 0; // Initialize order to 0
+    }
+
+    int count = 0;
+    int pageFaults = 0; // Variable to count page faults
+
+    cout << endl;
+    cout << "Printing the page sequence of process: ";
+    for(int i = 0; i < p; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << "\nPage frames\n";
+
+    for(int i = 0; i < p; i++) {
+        int flag = 0;
+
+        // Check if the page is already in frames
+        for(int j = 0; j < f; j++) {
+            if(arr[i] == arr1[j]) {
+                flag = 1;
+                count++;
+                order[j] = count; // Update the order of the accessed page
+            }
+        }
+
+        if(flag == 0) {
+            int minOrderIndex = 0;
+
+            for(int j = 0; j < f; j++) {
+                if(order[j] < order[minOrderIndex]) {
+                    minOrderIndex = j;
+                }
+            }
+
+            arr1[minOrderIndex] = arr[i];
+            count++;
+            order[minOrderIndex] = count;
+            pageFaults++; // Increment page faults
+        }
+
+        // Print the current state of page frames
+        for(int j = 0; j < f; j++) {
+            cout << arr1[j] << "\t";
+        }
+        cout << endl;
+    }
+
+    cout << "Total Page Faults: " << pageFaults << endl;
+   
+}
+
+int main() {
+    LRU();
+    return 0;
+}
